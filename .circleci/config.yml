@@ -35,14 +35,14 @@ jobs:
       - run:
          name: Move build to backend repository
          command:
-           mv ~/my-app-front/build ~/my-app-back
-           cd ~/my-app-back
+           mv ~/my-app-front/build ~/my-app-back &&
+           cd ~/my-app-back &&
            git add ~/my-app-back/build
       - run:
          name: Deploy front
          command: >-
            GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_fingerprint'
-           git commit -m "build"
+           git commit -m "build" &&
            git push
 workflows:
   version: 2
