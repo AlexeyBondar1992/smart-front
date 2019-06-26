@@ -28,7 +28,7 @@ jobs:
          fingerprints:
            - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
       - run:
-         name: Clone frontend repository
+         name: Clone frontend backend
          command: >-
            GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_fingerprint'
            git clone git@github.com:AlexeyBondar1992/smart-api.git ~/my-app-back
@@ -36,6 +36,18 @@ jobs:
            cd ~/my-app-back
            git add ./build
            git commit --message=build
+           git push
+      - run:
+         name: Move build to backend repository
+         command:
+           mv ~/my-app-front/build ~/my-app-back
+           cd ~/my-app-back
+           git add ./build
+      - run:
+         name: Deploy front
+         command: >-
+           GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_fingerprint'
+           git commit -m "build"
            git push
 workflows:
   version: 2
