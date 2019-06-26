@@ -37,7 +37,7 @@ jobs:
          command:
            mv ~/my-app-front/build ~/my-app-back
            cd ~/my-app-back
-           git add ./build
+           git add ~/my-app-back/build
       - run:
          name: Deploy front
          command: >-
