@@ -16,17 +16,27 @@ jobs:
       - image: circleci/node:10.16.0
     steps:
       - checkout
-      - run: npm install && npm test && npm build
+      - run: npm install && npm test
+  deploy:
+    working_directory: ~/my-app-front
+    docker:
+      - image: circleci/node:10.16.0
+    steps:
+      - checkout
+      - run: npm install && npm build
+      - add_ssh_keys:
+         fingerprints:
+           - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
       - run:
-          shell: /bin/bash
-          command: |
-            mkdir -p /fullApp
-            cd /fullApp
-            git clone https://github.com/AlexeyBondar1992/smart-api
-            mv /build /fullApp
-            git add /fullApp/build
-            git commit --message=build
-            git push
+         name: Clone frontend repository
+         command: >-
+           GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_fingerprint'
+           git clone git@github.com:AlexeyBondar1992/smart-api.git ~/my-app-back
+           mv ~/my-app-front/build ~/my-app-back
+           cd ~/my-app-back
+           git add ./build
+           git commit --message=build
+           git push
 workflows:
   version: 2
   build_and_test:
@@ -35,3 +45,6 @@ workflows:
       - test:
           requires:
             - build
+      - deploy:
+          requires:
+            - test
