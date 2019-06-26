@@ -1,28 +1,16 @@
-const standardHeaders = { 'Content-Type': 'application/json' };
+import { ajax } from './helpers/AJAX';
 
 class UserService {
-    get token () {
-        return sessionStorage.getItem('token');
-    }
-
-    set token (token) {
-        sessionStorage.setItem('token', token);
-    }
-
-    get requestHeaders () {
-        return this.token ? { ...standardHeaders, 'Authorization': this.token } : standardHeaders;
-    }
-
     authorize () {
-        return !this.token ? Promise.reject() : this.getUserId()
+        return !ajax.token ? Promise.reject() : this.getUserId()
             .then(userId => this.getUserProfile(userId));
     }
 
     signIn (email, password) {
-        return this.makeRequest('signin', 'post', { email, password })
+        return ajax.makeRequest('signin', 'post', { email, password })
             .then(({ userId, success, token }) => {
                 if (token) {
-                    this.token = token;
+                    ajax.token = token;
                 }
                 if (userId && success) {
                     return userId;
@@ -32,20 +20,12 @@ class UserService {
     }
 
     getUserId () {
-        return this.makeRequest('signin', 'post')
+        return ajax.makeRequest('signin', 'post')
             .then(data => (data && data.userId) || Promise.reject('Please sign in'));
     }
 
     getUserProfile (id) {
-        return this.makeRequest(`profile/${id}`);
-    }
-
-    makeRequest (url, method = 'get', body) {
-        const standardOptions = { method, headers: this.requestHeaders };
-        const options = body ? { ...standardOptions, body: JSON.stringify(body) } : standardOptions;
-
-        return fetch(`http://localhost:3000/${url}`, options)
-            .then(response => response.json());
+        return ajax.makeRequest(`profile/${id}`);
     }
 }
 

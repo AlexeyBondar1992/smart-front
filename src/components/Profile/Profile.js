@@ -1,5 +1,6 @@
 import React from 'react';
 import './Profile.css';
+import { ajax } from '../../helpers/AJAX';
 
 export default class Profile extends React.Component {
     constructor (props) {
@@ -28,14 +29,12 @@ export default class Profile extends React.Component {
     };
 
     onProfileUpdate = () => {
-        fetch(`http://localhost:3000/profile/${ this.props.user.id }`, {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ formInput: this.state })
-        }).then(() => {
-            this.props.toggleModal();
-            this.props.loadUser({ ...this.props.user, ...this.state });
-        }).catch(console.log)
+        ajax.makeRequest(`profile/${this.props.user.id}`, 'post', { formInput: this.state })
+            .then(() => {
+                this.props.toggleModal();
+                this.props.loadUser({ ...this.props.user, ...this.state });
+            })
+            .catch(console.log)
     };
 
     render () {

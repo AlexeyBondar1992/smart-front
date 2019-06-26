@@ -10,6 +10,7 @@ import Rank from './components/Rank/Rank';
 import Modal from './components/Modal/Modal';
 import Profile from './components/Profile/Profile';
 import userService from './userService';
+import { ajax } from './helpers/AJAX';
 import './App.css';
 
 
@@ -99,10 +100,10 @@ class App extends Component {
 
     onButtonSubmit = () => {
         this.setState({ imageUrl: this.state.input });
-        userService.makeRequest('imageurl', 'post',{ input: this.state.input })
+        ajax.makeRequest('imageurl', 'post',{ input: this.state.input })
             .then(response => {
                 if (response) {
-                    userService.makeRequest('image', 'put',{ id: this.state.user.id })
+                    ajax.makeRequest('image', 'put',{ id: this.state.user.id })
                         .then(count => {
                             this.setState(Object.assign(this.state.user, { entries: count }));
                         })

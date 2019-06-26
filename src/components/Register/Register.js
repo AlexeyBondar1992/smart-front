@@ -1,4 +1,5 @@
 import React from 'react';
+import { ajax } from '../../helpers/AJAX';
 
 
 class Register extends React.Component {
@@ -24,16 +25,11 @@ class Register extends React.Component {
     };
 
     onSubmitSignIn = () => {
-        fetch('http://localhost:3000/register', {
-            method: 'post',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password,
-                name: this.state.name
-            })
+        ajax.makeRequest('register', 'post', {
+            email: this.state.email,
+            password: this.state.password,
+            name: this.state.name
         })
-            .then(response => response.json())
             .then(user => {
                 if (user.id) {
                     this.props.loadUser(user);
