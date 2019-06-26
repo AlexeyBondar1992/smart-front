@@ -32,11 +32,6 @@ jobs:
          command: >-
            GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_fingerprint'
            git clone git@github.com:AlexeyBondar1992/smart-api.git ~/my-app-back
-           mv ~/my-app-front/build ~/my-app-back
-           cd ~/my-app-back
-           git add ./build
-           git commit --message=build
-           git push
       - run:
          name: Move build to backend repository
          command:
