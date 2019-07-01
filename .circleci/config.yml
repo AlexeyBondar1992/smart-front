@@ -39,6 +39,7 @@ jobs:
       - run:
          name: Move build to backend repository
          command:
+           ls &&
            mv home/circleci/my-app-front/build home/circleci/my-app-front/my-app-back &&
            cd home/circleci/my-app-front/my-app-back &&
            git add home/circleci/my-app-front/my-app-back/build
