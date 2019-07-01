@@ -51,7 +51,9 @@ jobs:
            git add ~/my-app-front/my-app-back/build
       - run:
          name: Deploy front
-         command: git commit -m "build" && git push
+         command: git config --global user.email "metallhead92@mail.ru" &&
+           git config --global user.name "AlexeyBondar1992" &&
+           git commit -m "build" && git push
 workflows:
   version: 2
   build_and_test:
