@@ -5,9 +5,9 @@ defaults: &defaults
     - image: circleci/node:10.16.0
 jobs:
   build:
-    docker:
-      - image: circleci/node:10.16.0
     steps:
+      - attach_workspace:
+          at: home/circleci/my-app-front
       - checkout
       - run:
          name: install-npm
@@ -16,16 +16,13 @@ jobs:
          name: build
          command: npm build
   test:
-    docker:
-      - image: circleci/node:10.16.0
-    steps:
-      - checkout
+      - attach_workspace:
+          at: home/circleci/my-app-front
       - run: npm install && npm test
   deploy:
     <<: *defaults
     steps:
       - checkout
-      - run: npm install && npm build
       - attach_workspace:
          at: home/circleci/my-app-front
       - add_ssh_keys:
