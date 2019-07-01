@@ -6,9 +6,9 @@ defaults: &defaults
 jobs:
   build:
     steps:
+      - checkout
       - attach_workspace:
           at: home/circleci/my-app-front
-      - checkout
       - run:
          name: install-npm
          command: npm install
@@ -16,6 +16,7 @@ jobs:
          name: build
          command: npm build
   test:
+    steps:
       - attach_workspace:
           at: home/circleci/my-app-front
       - run: npm install && npm test
@@ -25,6 +26,7 @@ jobs:
       - checkout
       - attach_workspace:
          at: home/circleci/my-app-front
+      - run: npm install && npm build
       - add_ssh_keys:
          fingerprints:
            - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
