@@ -16,6 +16,11 @@ jobs:
       - run:
          name: build
          command: npm build
+      - persist_to_workspace:
+         root: . # Persist current working directory
+         paths: ./* # Glob. Will persist everything in folder
+      - store_artifacts:
+          path: ./build # executable
   test:
     <<: *defaults
     steps:
