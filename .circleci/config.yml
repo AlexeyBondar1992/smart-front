@@ -5,6 +5,7 @@ defaults: &defaults
     - image: circleci/node:10.16.0
 jobs:
   build:
+    <<: *defaults
     steps:
       - checkout
       - attach_workspace:
@@ -16,6 +17,7 @@ jobs:
          name: build
          command: npm build
   test:
+    <<: *defaults
     steps:
       - attach_workspace:
           at: home/circleci/my-app-front
