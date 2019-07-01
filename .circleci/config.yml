@@ -1,4 +1,8 @@
 version: 2
+defaults: &defaults
+  working_directory: ~/my-app-front
+  docker:
+    - image: circleci/node:10.16.0
 jobs:
   build:
     docker:
@@ -18,17 +22,17 @@ jobs:
       - checkout
       - run: npm install && npm test
   deploy:
-    working_directory: ~/my-app-front
-    docker:
-      - image: circleci/node:10.16.0
+    <<: *defaults
     steps:
       - checkout
       - run: npm install && npm build
+        - attach_workspace:
+            at: ~/my-app-front
       - add_ssh_keys:
          fingerprints:
            - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
       - run:
-         name: Clone frontend backend
+         name: Clone backend
          command: >-
            GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_fingerprint'
            git clone git@github.com:AlexeyBondar1992/smart-api.git ~/my-app-back
