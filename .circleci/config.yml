@@ -34,7 +34,12 @@ jobs:
       - checkout
       - attach_workspace:
          at: ~/my-app-front
-      - run: npm install && npm build
+      - run:
+         name: install-npm
+         command: npm install
+      - run:
+         name: build
+         command: npm build
       - add_ssh_keys:
          fingerprints:
            - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
