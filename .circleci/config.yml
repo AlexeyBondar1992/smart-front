@@ -1,6 +1,6 @@
 version: 2
 defaults: &defaults
-  working_directory: etc/circleci/my-app-front
+  working_directory: home/circleci/my-app-front
   docker:
     - image: circleci/node:10.16.0
 jobs:
