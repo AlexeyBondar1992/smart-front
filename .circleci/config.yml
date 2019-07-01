@@ -15,7 +15,7 @@ jobs:
          command: npm install
       - run:
          name: build
-         command: npm build
+         command: npm run build
       - persist_to_workspace:
          root: . # Persist current working directory
          paths: ./* # Glob. Will persist everything in folder
@@ -27,7 +27,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/my-app-front
-      - run: npm install && npm test
+      - run: npm install && npm run test
   deploy:
     <<: *defaults
     steps:
@@ -39,7 +39,7 @@ jobs:
          command: npm install
       - run:
          name: build
-         command: npm build
+         command: npm run build
       - add_ssh_keys:
          fingerprints:
            - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
