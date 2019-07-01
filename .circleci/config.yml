@@ -27,25 +27,16 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/my-app-front
-      - run: npm install && npm run test
+      - run: npm run test
   deploy:
     <<: *defaults
     steps:
       - checkout
       - attach_workspace:
          at: ~/my-app-front
-      - run:
-         name: install-npm
-         command: npm install
-      - run:
-         name: build
-         command: npm run build
       - add_ssh_keys:
          fingerprints:
            - "8c:85:b7:6b:88:eb:40:40:e9:0f:b7:49:dd:58:35:a4"
-      - run:
-         name: checking ssh keys
-         command: cd ~/.ssh && ls
       - run:
          name: Clone backend
          command: >-
@@ -60,10 +51,7 @@ jobs:
            git add ~/my-app-front/my-app-back/build
       - run:
          name: Deploy front
-         command: >-
-           GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_8c85b76b88eb4040e90fb749dd5835a4'
-           git commit -m "build" &&
-           git push
+         command: git commit -m "build" && git push
 workflows:
   version: 2
   build_and_test:
