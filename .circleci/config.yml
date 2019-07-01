@@ -42,7 +42,7 @@ jobs:
          command: npm run build
       - add_ssh_keys:
          fingerprints:
-           - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
+           - "8c:85:b7:6b:88:eb:40:40:e9:0f:b7:49:dd:58:35:a4"
       - run:
          name: Clone backend
          command: >-
