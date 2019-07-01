@@ -26,8 +26,8 @@ jobs:
     steps:
       - checkout
       - run: npm install && npm build
-        - attach_workspace:
-            at: ~/my-app-front
+      - attach_workspace:
+         at: ~/my-app-front
       - add_ssh_keys:
          fingerprints:
            - "31:b0:29:dd:4a:62:52:30:75:54:4f:ca:70:fe:fe:1c"
