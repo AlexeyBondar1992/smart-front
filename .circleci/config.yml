@@ -45,7 +45,7 @@ jobs:
            - "8c:85:b7:6b:88:eb:40:40:e9:0f:b7:49:dd:58:35:a4"
       - run:
          name: checking ssh keys
-           command: cd ~/.ssh && ls
+         command: cd ~/.ssh && ls
       - run:
          name: Clone backend
          command: >-
