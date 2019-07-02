@@ -28,32 +28,17 @@ jobs:
       - attach_workspace:
           at: ~/my-app-front
       - run: npm run test
-  deploy:
-    <<: *defaults
+  triger_backend_build:
+    docker:
+      - image: spotify/alpine
     steps:
-      - checkout
-      - attach_workspace:
-         at: ~/my-app-front
-      - add_ssh_keys:
-         fingerprints:
-           - "8c:85:b7:6b:88:eb:40:40:e9:0f:b7:49:dd:58:35:a4"
       - run:
-         name: Clone backend
-         command: >-
-           GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_8c85b76b88eb4040e90fb749dd5835a4'
-           git clone git@github.com:AlexeyBondar1992/smart-api.git ~/my-app-front/my-app-back
-      - run:
-         name: Move build to backend repository
-         command:
-           ls &&
-           mv ~/my-app-front/build ~/my-app-front/my-app-back &&
-           cd ~/my-app-front/my-app-back &&
-           git add ~/my-app-front/my-app-back/build
-      - run:
-         name: Deploy front
-         command: git config --global user.email "metallhead92@mail.ru" &&
-           git config --global user.name "AlexeyBondar1992" &&
-           git commit -m "build" && git push
+         name: Trigger the Build Job
+         command: |
+           printf "Triggering an $PROJECT build on the $CIRCLE_BRANCH branch\n\n"
+           BUILD_INFO=$(curl -X POST -H -d \
+               "{}" \
+               "https://circleci.com/api/v1/project/$ORGANIZATION/$PROJECT/tree/$CIRCLE_BRANCH?circle-token=$CIRCLE_TOKEN")
 workflows:
   version: 2
   build_and_test:
@@ -62,6 +47,6 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
+      - triger_backend_build:
           requires:
             - test
