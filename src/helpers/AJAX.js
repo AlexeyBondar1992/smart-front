@@ -1,8 +1,12 @@
 const standardHeaders = { 'Content-Type': 'application/json' };
+const localhost = 'localhost';
 
 class AJAX {
     constructor() {
-        this.baseUrl = window.location.hostname;
+        const location = window.location.hostname;
+        const protocol = location === localhost ? 'http://' : 'https://';
+
+        this.baseUrl = `${ protocol }${ location }`;
     }
 
     get token () {
@@ -21,7 +25,7 @@ class AJAX {
         const standardOptions = { method, headers: this.requestHeaders };
         const options = body ? { ...standardOptions, body: JSON.stringify(body) } : standardOptions;
 
-        return fetch(`http://${ this.baseUrl }:3000/${ url }`, options)
+        return fetch(`${ this.baseUrl }:3000/${ url }`, options)
             .then(response => response.json());
     }
 }
