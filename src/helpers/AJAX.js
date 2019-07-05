@@ -25,6 +25,8 @@ class AJAX {
         const standardOptions = { method, headers: this.requestHeaders };
         const options = body ? { ...standardOptions, body: JSON.stringify(body) } : standardOptions;
 
+        console.log(window.location.hostname, this.baseUrl);
+
         return fetch(`${ this.baseUrl }:3000/${ url }`, options)
             .then(response => response.json());
     }
