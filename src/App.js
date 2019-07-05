@@ -11,6 +11,7 @@ import Modal from './components/Modal/Modal';
 import Profile from './components/Profile/Profile';
 import userService from './userService';
 import { ajax } from './helpers/AJAX';
+import { appRotes, APIUrls, APIMethods } from './constants';
 import './App.css';
 
 
@@ -30,7 +31,7 @@ const initialState = {
     input: '',
     imageUrl: '',
     boxes: [],
-    route: 'signin',
+    route: appRotes.signIn,
     isSignedIn: false,
     isProfileOpen: false,
     user: {
@@ -55,10 +56,10 @@ class App extends Component {
             .then(user => {
                 if(user.name && user.email) {
                     this.loadUser(user);
-                    this.onRouteChange('home');
+                    this.onRouteChange(appRotes.home);
                 }
             })
-            .catch(() => this.onRouteChange('signin'));
+            .catch(() => this.onRouteChange(appRotes.signIn));
     }
 
     loadUser = (data) => {
@@ -100,10 +101,10 @@ class App extends Component {
 
     onButtonSubmit = () => {
         this.setState({ imageUrl: this.state.input });
-        ajax.makeRequest('imageurl', 'post',{ input: this.state.input })
+        ajax.makeRequest(APIUrls.imageUrl, APIMethods.post,{ input: this.state.input })
             .then(response => {
                 if (response) {
-                    ajax.makeRequest('image', 'put',{ id: this.state.user.id })
+                    ajax.makeRequest(APIUrls.image, APIMethods.put,{ id: this.state.user.id })
                         .then(count => {
                             this.setState(Object.assign(this.state.user, { entries: count }));
                         })
@@ -116,9 +117,10 @@ class App extends Component {
     };
 
     onRouteChange = (route) => {
-        if (route === 'signout') {
+        if (route === appRotes.signOut) {
+            ajax.token = '';
             return this.setState(initialState);
-        } else if (route === 'home') {
+        } else if (route === appRotes.home) {
             this.setState({ isSignedIn: true });
         }
         this.setState({ route });
@@ -136,16 +138,15 @@ class App extends Component {
         return (
             <div className="App">
                 <Particles className="particles"
-                           params={particlesOptions}
-                />
+                           params={ particlesOptions }/>
                 <Navigation isSignedIn={ isSignedIn }
                             onRouteChange={ this.onRouteChange }
-                            toggleModal={ this.toggleModal } />
+                            toggleModal={ this.toggleModal }/>
                 { isProfileOpen &&
                     <Modal>
                         <Profile toggleModal={ this.toggleModal } user={ user } loadUser={ this.loadUser }/>
                     </Modal> }
-                {route === 'home'
+                {route === appRotes.home
                     ? <div>
                         <Logo/>
 
@@ -160,7 +161,7 @@ class App extends Component {
                         <FaceRecognition boxes={ boxes } imageUrl={ imageUrl }/>
                     </div>
                     : (
-                        route === 'signin'
+                        route === appRotes.signIn
                             ? <Signin loadUser={ this.loadUser } onRouteChange={ this.onRouteChange }/>
                             : <Register loadUser={ this.loadUser } onRouteChange={ this.onRouteChange }/>
                     )

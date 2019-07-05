@@ -1,6 +1,19 @@
 import React from 'react';
 import './Profile.css';
 import { ajax } from '../../helpers/AJAX';
+import { APIMethods, APIUrls } from '../../constants';
+
+const controls = {
+    userName: 'name',
+    userAge: 'age',
+    userPet: 'pet'
+
+};
+const placeholders = {
+    userName: 'Adam',
+    userAge: '55',
+    userPet: 'Dragon'
+};
 
 export default class Profile extends React.Component {
     constructor (props) {
@@ -13,23 +26,13 @@ export default class Profile extends React.Component {
     }
 
     onFormChange = event => {
-        switch (event.target.name) {
-        case 'user-name':
-            this.setState({ name: event.target.value });
-            break;
-        case 'user-age':
-            this.setState({ age: event.target.value });
-            break;
-        case 'user-pet':
-            this.setState({ pet: event.target.value });
-            break;
-        default:
-            return;
+        if (this.state.hasOwnProperty(event.target.name)) {
+            this.setState({ [event.target.name]: event.target.value });
         }
     };
 
     onProfileUpdate = () => {
-        ajax.makeRequest(`profile/${this.props.user.id}`, 'post', { formInput: this.state })
+        ajax.makeRequest(`${ APIUrls.profile }/${ this.props.user.id }`, APIMethods.post, { formInput: this.state })
             .then(() => {
                 this.props.toggleModal();
                 this.props.loadUser({ ...this.props.user, ...this.state });
@@ -50,30 +53,20 @@ export default class Profile extends React.Component {
                         <h4>Images Submitted: { user.entries }</h4>
                         <p>Member since: { new Date(user.joined).toLocaleDateString() }</p>
                         <hr/>
-                        <label className="mt2 fw6" htmlFor="user-name">Name: </label>
-                        <input
-                            className="pa2 ba w-100"
-                            placeholder={ this.state.name }
-                            onChange={ this.onFormChange }
-                            type="text"
-                            name="user-name"
-                            id="user-name"/>
-                        <label className="mt2 fw6" htmlFor="user-age">Age: </label>
-                        <input
-                            className="pa2 ba w-100"
-                            placeholder={ this.state.age || '55' }
-                            onChange={ this.onFormChange }
-                            type="text"
-                            name="user-age"
-                            id="user-age"/>
-                        <label className="mt2 fw6" htmlFor="user-pet">Pet: </label>
-                        <input
-                            className="pa2 ba w-100"
-                            placeholder={ this.state.pet || 'Dragon' }
-                            onChange={ this.onFormChange }
-                            type="text"
-                            name="user-pet"
-                            id="user-pet"/>
+                        {
+                            Object.entries(controls).map(([key, control]) =>
+                                <div key={key}>
+                                    <label className="mt2 fw6" htmlFor={ control }>{control}: </label>
+                                    <input
+                                        className="pa2 ba w-100"
+                                        placeholder={ this.state[control] || placeholders[key] }
+                                        onChange={ this.onFormChange }
+                                        type="text"
+                                        name={ control }
+                                        id={ control }/>
+                                </div>
+                            )
+                        }
                         <div className="buttons-wrapper">
                             <button className="b pa2 grow pointer hover-white w-40 bg-light-blue b--black-20"
                                     onClick={ this.onProfileUpdate }>

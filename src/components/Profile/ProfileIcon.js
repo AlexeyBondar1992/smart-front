@@ -1,18 +1,15 @@
 import React from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import {appRotes} from '../../constants';
 
 export default class ProfileIcon extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {
-            dropdownOpen: false
-        };
+        this.state = { dropdownOpen: false };
     }
 
     toggle = () => {
-        this.setState(prevState => ({
-            dropdownOpen: !prevState.dropdownOpen
-        }));
+        this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
     };
 
     render () {
@@ -32,8 +29,8 @@ export default class ProfileIcon extends React.Component {
                                   left: '-70px',
                                   marginTop: '-20px'
                               }}>
-                    <DropdownItem onClick={() => toggleModal()}>View Profile</DropdownItem>
-                    <DropdownItem onClick={() => onRouteChange('signout')}>Sign out</DropdownItem>
+                    <DropdownItem onClick={ () => toggleModal() }>View Profile</DropdownItem>
+                    <DropdownItem onClick={ () => onRouteChange(appRotes.signOut) }>Sign out</DropdownItem>
                 </DropdownMenu>
             </Dropdown>
         );

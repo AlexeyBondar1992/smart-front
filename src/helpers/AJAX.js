@@ -1,27 +1,28 @@
+import { APIMethods, storage } from "../constants";
+
 const standardHeaders = { 'Content-Type': 'application/json' };
 const localhost = 'localhost';
 
 class AJAX {
     constructor() {
         const location = window.location.hostname;
-        const protocol = location === localhost ? 'http://' : 'https://';
 
-        this.baseUrl = `${ protocol }${ location }${ location === localhost ? ':3000' : '' }`;
+        this.baseUrl = location === localhost ? `http://${ location }:3000` : `https://${ location }`;
     }
 
     get token () {
-        return sessionStorage.getItem('token');
+        return sessionStorage.getItem(storage.token);
     }
 
     set token (token) {
-        sessionStorage.setItem('token', token);
+        sessionStorage.setItem(storage.token, token);
     }
 
     get requestHeaders () {
         return this.token ? { ...standardHeaders, 'Authorization': this.token } : standardHeaders;
     }
 
-    makeRequest (url, method = 'get', body) {
+    makeRequest (url, method = APIMethods.get, body) {
         const standardOptions = { method, headers: this.requestHeaders };
         const options = body ? { ...standardOptions, body: JSON.stringify(body) } : standardOptions;
 

@@ -1,4 +1,5 @@
 import { ajax } from './helpers/AJAX';
+import { APIUrls, APIMethods } from "./constants";
 
 class UserService {
     authorize () {
@@ -7,7 +8,7 @@ class UserService {
     }
 
     signIn (email, password) {
-        return ajax.makeRequest('signin', 'post', { email, password })
+        return ajax.makeRequest(APIUrls.signIn, APIMethods.post, { email, password })
             .then(({ userId, success, token }) => {
                 if (token) {
                     ajax.token = token;
@@ -20,12 +21,12 @@ class UserService {
     }
 
     getUserId () {
-        return ajax.makeRequest('signin', 'post')
+        return ajax.makeRequest(APIUrls.signIn, APIMethods.post)
             .then(data => (data && data.userId) || Promise.reject('Please sign in'));
     }
 
     getUserProfile (id) {
-        return ajax.makeRequest(`profile/${id}`);
+        return ajax.makeRequest(`${APIUrls.profile}/${id}`);
     }
 }
 
