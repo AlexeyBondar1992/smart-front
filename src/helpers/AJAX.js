@@ -6,7 +6,7 @@ class AJAX {
         const location = window.location.hostname;
         const protocol = location === localhost ? 'http://' : 'https://';
 
-        this.baseUrl = `${ protocol }${ location }`;
+        this.baseUrl = `${ protocol }${ location }${ location === localhost ? ':3000' : '' }`;
     }
 
     get token () {
@@ -25,7 +25,7 @@ class AJAX {
         const standardOptions = { method, headers: this.requestHeaders };
         const options = body ? { ...standardOptions, body: JSON.stringify(body) } : standardOptions;
 
-        return fetch(`${ this.baseUrl }:3000/${ url }`, options)
+        return fetch(`${ this.baseUrl }/${ url }`, options)
             .then(response => response.json());
     }
 }
